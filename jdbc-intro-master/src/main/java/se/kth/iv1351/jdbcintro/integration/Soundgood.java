@@ -1,14 +1,11 @@
 package se.kth.iv1351.jdbcintro.integration;
 
-import com.mysql.cj.protocol.Resultset;
 import se.kth.iv1351.jdbcintro.model.Instrument;
 import se.kth.iv1351.jdbcintro.model.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * This class handles and encapsulates all database calls in the Soundgood application.
@@ -42,6 +39,9 @@ public class Soundgood {
     private PreparedStatement rentInstrumentStmt;
     private PreparedStatement terminateRentalStmt;
 
+    /**
+     * Creates a new Soundgood object and attempts to connect to the database.
+     */
     public Soundgood() {
         try {
             connectToDB();
@@ -51,6 +51,12 @@ public class Soundgood {
         }
     }
 
+    /**
+     * Finds all rental instruments by instrument name (e.g. piano, guitar, ...)
+     * @param instrumentType the specified instrument name
+     * @return A list containing found instruments
+     * @throws SoundgoodException on failure to find rental instruments
+     */
     public List<Instrument> findRentalInstruments(String instrumentType) throws SoundgoodException {
         String errorMsg = "Could not find rental instruments.";
         ResultSet results = null;
@@ -78,6 +84,11 @@ public class Soundgood {
         return rentalInstruments;
     }
 
+    /**
+     * Finds all students in the database.
+     * @return A list of all students.
+     * @throws SoundgoodException on failure to retrieve all students.
+     */
     public List<Student> findStudents() throws SoundgoodException {
         String errorMsg = "Could not find students.";
         List<Student> students = new ArrayList<>();
@@ -94,6 +105,14 @@ public class Soundgood {
         return students;
     }
 
+    /**
+     * Rents an instrument.
+     * @param rentalInstrumentId the specified rental instrument id.
+     * @param studentId the specified student id.
+     * @param duration the specified duration in months.
+     * @param instrumentSkill the specified instrument skill (beginner, intermediate or advanced).
+     * @throws SoundgoodException on failure to rent instrument.
+     */
     public void rentInstrument(int rentalInstrumentId, int studentId, int duration, String instrumentSkill) throws SoundgoodException {
         String errorMsg = "Could not rent instrument.";
         if (duration > 12)
@@ -116,6 +135,12 @@ public class Soundgood {
         }
     }
 
+    /**
+     * Finds student rentals by student id.
+     * @param studentId the specified student id.
+     * @return A list of a student's ongoing rental instruments
+     * @throws SoundgoodException on failure to retrieve a student's ongoing rental instruments
+     */
     public List<Instrument> findStudentRentals(int studentId) throws SoundgoodException {
         String errorMsg = "Could not find student's ongoing instrument rentals.";
         List<Instrument> instruments = new ArrayList<>();
@@ -143,6 +168,12 @@ public class Soundgood {
         return instruments;
     }
 
+    /**
+     * Terminates an ongoing instrument rental.
+     * @param rentalInstrumentId the specified rental instrument id.
+     * @param studentId the specified student id.
+     * @throws SoundgoodException on failure to terminate rental.
+     */
     public void terminateRental(int rentalInstrumentId, int studentId) throws SoundgoodException {
         String errorMsg = "Could not terminate instrument rental.";
         try {
@@ -163,8 +194,8 @@ public class Soundgood {
     }
 
     private Integer findStudentPersonId(int studentId) throws SoundgoodException {
-            String errorMsg = "Could not find student's person id.";
-            ResultSet result = null;
+        String errorMsg = "Could not find student's person id.";
+        ResultSet result = null;
         try {
             findStudentPersonIdStmt.setInt(1, studentId);
             result = findStudentPersonIdStmt.executeQuery();
