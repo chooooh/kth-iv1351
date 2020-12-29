@@ -92,19 +92,20 @@ CREATE TABLE "person_instrument"
 
 CREATE TABLE "rental_instrument"
 (
+    "id" SERIAL PRIMARY KEY,
     "instrument_id" int NOT NULL REFERENCES "instrument" ON DELETE CASCADE,
     "brand" varchar(500),
     "date" date,
     "time" time,
     "duration" int,
     "fee" int,
-    "is_rented" varchar(5),
-    PRIMARY KEY("instrument_id")
+    "is_rented" boolean,
+    "is_terminated" boolean
 );
 
 CREATE TABLE "stock"
 (
-    "instrument_id" int NOT NULL REFERENCES "rental_instrument" ON DELETE CASCADE,
+    "instrument_id" int NOT NULL REFERENCES "instrument" ON DELETE CASCADE,
     "instrument_quantity" int NOT NULL
 );
 
@@ -117,13 +118,13 @@ CREATE TABLE "administrator"
 
 CREATE TABLE "application"
 (
+    "application_id" serial PRIMARY KEY,
     "student_id" int NOT NULL REFERENCES "student" ON DELETE CASCADE,
     "administrator_id" int NOT NULL REFERENCES "administrator" ON DELETE CASCADE,
     "instrument_id" int NOT NULL REFERENCES "instrument" ON DELETE CASCADE,
     "instrument_skill" varchar(500) NOT NULL,
     "date" timestamp,
-    "time" time,
-    PRIMARY KEY("student_id")
+    "time" time
 );
 
 
@@ -483,21 +484,47 @@ VALUES ('string', 'guitar');
 
 
 -- rental_instrument (duration in months)
-INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented")
-VALUES ('1', 'stentor', '2020-10-01', '13:00', '3', '400', 'true');
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented", "is_terminated")
+VALUES ('1', 'stentor', '2020-10-01', '13:00', '3', '400', TRUE, FALSE);
 
-INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented")
-VALUES ('3', 'steinway and sons', '2020-12-07', '12:00', '2', '800', 'true');
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented", "is_terminated")
+VALUES ('3', 'steinway and sons', '2020-12-07', '12:00', '2', '800', TRUE, FALSE);
 
-INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented")
-VALUES ('4', 'fender', '2020-11-20', '15:00', '8', '600', 'true');
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented", "is_terminated")
+VALUES ('4', 'fender', '2020-11-20', '15:00', '8', '600', TRUE, FALSE);
 
---test 
-INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented")
-VALUES ('5', 'ooga booga', '2020-11-20', '15:00', '8', '600', 'true');
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('5', 'yamaha', '450', FALSE, FALSE);
 
-INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented")
-VALUES ('7', 'fender', '600', 'false');
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('5', 'yamaha', '450', FALSE, FALSE);
+
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('5', 'yamaha', '450', FALSE, FALSE);
+
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('7', 'fender', '600', FALSE, FALSE);
+
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('7', 'fender', '600', FALSE, FALSE);
+
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('1', '0');
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('3', '0');
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('4', '0');
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('5', '3');
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('7', '2');
+
+
 
 
 -- person_instrument
@@ -514,21 +541,10 @@ VALUES ('3', '3', 'advanced');
 INSERT INTO "person_instrument" ("instrument_id", "person_id", "present_skill")
 VALUES ('4', '4', 'intermediate');
 --      instructor instruments
-INSERT INTO "person_instrument" ("instrument_id", "person_id", "present_skill")
-VALUES ('5', '5', 'advanced');
 
 INSERT INTO "person_instrument" ("instrument_id", "person_id", "present_skill")
 VALUES ('6', '6', 'advanced');
 
--- stock
-INSERT INTO "stock" ("instrument_id", "instrument_quantity")
-VALUES ('1', '3');
-
-INSERT INTO "stock" ("instrument_id", "instrument_quantity")
-VALUES ('3', '0');
-
-INSERT INTO "stock" ("instrument_id", "instrument_quantity")
-VALUES ('4', '2');
 
 -- application
 INSERT INTO "application" ("student_id", "administrator_id", "instrument_skill", "instrument_id", "date", "time")
