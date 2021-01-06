@@ -76,6 +76,7 @@ public class BlockingInterpreter {
                         System.out.println("rentals: ");
                         for (Instrument instrument : instruments) {
                             System.out.println("\trental id: " + instrument.getRentalId() + ", "
+                                    + "instrument id: " + instrument.getInstrumentId() + ", "
                                     + "name: " + instrument.getName() + ", "
                                     + "brand: " + instrument.getBrand() + ", "
                                     + "fee: " + instrument.getFee() + " SEK/month"
@@ -107,9 +108,10 @@ public class BlockingInterpreter {
                         System.out.println("available instruments: ");
                         for (Instrument instrument : instruments) {
                             System.out.println("\trental id: " + instrument.getRentalId() + ", "
+                                    + "instrument id: " + instrument.getInstrumentId() + ", "
                                     + "name: " + instrument.getName() + ", "
                                     + "brand: " + instrument.getBrand() + ", "
-                                    + "fee: " + instrument.getFee()
+                                    + "fee: " + instrument.getFee() + " SEK/month"
                             );
                         }
                         break;

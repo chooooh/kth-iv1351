@@ -76,7 +76,7 @@ public class Soundgood {
                 rentalInstruments.add(new Instrument(rentalId, instrumentId, brand, fee, date, time, duration, name));
             }
             connection.commit();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             handleException(errorMsg, e);
         } finally {
             closeResultSet(errorMsg, results);
@@ -118,7 +118,7 @@ public class Soundgood {
         if (duration > 12)
             handleException("Cannot rent instruments for more than 12 months.", null);
         try {
-            if (checkIfRentalInstrumentIsRentable(rentalInstrumentId) || findStudentRentals(studentId).size() >= 2)
+            if (checkIfRentalInstrumentIsRentable(rentalInstrumentId))
                 handleException(errorMsg, null);
             int instrumentId = findInstrumentIdByRentalInstrumentId(rentalInstrumentId);
             int personId = findStudentPersonId(studentId);
@@ -145,8 +145,9 @@ public class Soundgood {
         String errorMsg = "Could not find student's ongoing instrument rentals.";
         List<Instrument> instruments = new ArrayList<>();
         ResultSet results = null;
+        int personId = findStudentPersonId(studentId);
         try {
-            findStudentOngoingRentalsStmt.setInt(1, studentId);
+            findStudentOngoingRentalsStmt.setInt(1, personId);
             results = findStudentOngoingRentalsStmt.executeQuery();
             while (results.next()) {
                 String name = results.getString(1);
@@ -161,6 +162,8 @@ public class Soundgood {
                 instruments.add(new Instrument(rentalId, instrumentId, brand, fee, date, time, duration, name));
             }
         } catch (SQLException e) {
+            handleException(errorMsg, e);
+        } catch (Exception e) {
             handleException(errorMsg, e);
         } finally {
             closeResultSet(errorMsg, results);
@@ -212,7 +215,7 @@ public class Soundgood {
         return null;
     }
 
-    private Integer findInstrumentIdByRentalInstrumentId(int rentalInstrumentId) throws SoundgoodException {
+    public Integer findInstrumentIdByRentalInstrumentId(int rentalInstrumentId) throws SoundgoodException {
         String errorMsg = "Could not find instrument id by rental instrument id.";
         ResultSet result = null;
         try {
@@ -318,7 +321,7 @@ public class Soundgood {
         findStudentPersonIdStmt = connection.prepareStatement("SELECT s.id FROM " + STUDENT_TABLE_NAME + " AS s INNER JOIN " + PERSON_TABLE_NAME + " AS p ON s.person_id = p.id WHERE s.id = ?");
         findInstrumentIdByRentalInstrumentIdStmt = connection.prepareStatement("SELECT ri.instrument_id FROM " + RENTAL_INSTRUMENT_TABLE_NAME + " AS ri WHERE ri.id = ?");
         findRentalInstrumentStmt = connection.prepareStatement("SELECT * FROM " + RENTAL_INSTRUMENT_TABLE_NAME + " WHERE id = ?");
-        findStudentOngoingRentalsStmt = connection.prepareStatement("SELECT i.instrument_name, ri.brand, ri.fee, ri.date, ri.time, ri.duration, ri.id, i.id FROM " + STUDENT_TABLE_NAME + " s INNER JOIN " + PERSON_INSTRUMENT_TABLE_NAME + " pi ON pi.person_id = s.person_id INNER JOIN " + INSTRUMENT_TABLE_NAME + " i ON i.id = pi.instrument_id INNER JOIN " + RENTAL_INSTRUMENT_TABLE_NAME + " ri ON ri.instrument_id = i.id WHERE s.id = ? AND ri.is_rented = true");
+        findStudentOngoingRentalsStmt = connection.prepareStatement("SELECT i.instrument_name, ri.brand, ri.fee, ri.date, ri.time, ri.duration, ri.id, i.id FROM " + STUDENT_TABLE_NAME + " s INNER JOIN " + PERSON_INSTRUMENT_TABLE_NAME + " pi ON pi.person_id = s.person_id INNER JOIN " + INSTRUMENT_TABLE_NAME + " i ON i.id = pi.instrument_id INNER JOIN " + RENTAL_INSTRUMENT_TABLE_NAME + " ri ON ri.instrument_id = i.id WHERE pi.person_id = ? AND ri.is_rented = true");
         findStudentsStmt = connection.prepareStatement("SELECT s.id, e.email FROM " + STUDENT_TABLE_NAME + " s " + "INNER JOIN " + PERSON_TABLE_NAME + " p ON p.id = s.person_id " + "INNER JOIN " + PERSON_EMAIL_TABLE_NAME + " pe ON pe.person_id = p.id " + "INNER JOIN " + EMAIL_TABLE_NAME + " e ON e.id = pe.email_id ");
 
         rentInstrumentStmt = connection.prepareStatement("INSERT INTO " + PERSON_INSTRUMENT_TABLE_NAME + " (instrument_id, person_id, present_skill) VALUES (?, ?, ?)");

@@ -13,7 +13,7 @@ public class Instrument {
     private int duration;
     private String name;
 
-    public Instrument(int rentalId, int instrumentId, String brand, int fee, Date date, Time time, int duration, String name) {
+    public Instrument(int rentalId, int instrumentId, String brand, int fee, Date date, Time time, int duration, String name) throws Exception {
         this.rentalId = rentalId;
         this.instrumentId = instrumentId;
         this.brand = brand;

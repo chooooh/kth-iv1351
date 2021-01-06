@@ -482,6 +482,13 @@ VALUES ('wind', 'trumpet');
 INSERT INTO "instrument" ("instrument_type", "instrument_name")
 VALUES ('string', 'guitar');
 
+-- 8, 9
+INSERT INTO "instrument" ("instrument_type", "instrument_name")
+VALUES ('string', 'guitar');
+
+INSERT INTO "instrument" ("instrument_type", "instrument_name")
+VALUES ('string', 'piano');
+
 
 -- rental_instrument (duration in months)
 INSERT INTO "rental_instrument" ("instrument_id", "brand", "date", "time", "duration", "fee", "is_rented", "is_terminated")
@@ -500,13 +507,16 @@ INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "
 VALUES ('5', 'yamaha', '450', FALSE, FALSE);
 
 INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
-VALUES ('5', 'yamaha', '450', FALSE, FALSE);
-
-INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
 VALUES ('7', 'fender', '600', FALSE, FALSE);
 
 INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
 VALUES ('7', 'fender', '600', FALSE, FALSE);
+
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('8', 'gibson', '700', FALSE, FALSE);
+
+INSERT INTO "rental_instrument" ("instrument_id", "brand", "fee", "is_rented", "is_terminated")
+VALUES ('9', 'bösendorfer', '1000', FALSE, FALSE);
 
 
 INSERT INTO "stock" ("instrument_id", "instrument_quantity")
@@ -519,10 +529,16 @@ INSERT INTO "stock" ("instrument_id", "instrument_quantity")
 VALUES ('4', '0');
 
 INSERT INTO "stock" ("instrument_id", "instrument_quantity")
-VALUES ('5', '3');
+VALUES ('5', '2');
 
 INSERT INTO "stock" ("instrument_id", "instrument_quantity")
 VALUES ('7', '2');
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('8', '1');
+
+INSERT INTO "stock" ("instrument_id", "instrument_quantity")
+VALUES ('9', '1');
 
 
 
@@ -720,3 +736,21 @@ VALUES ('2', '3');
 
 INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
 VALUES ('2', '4');
+
+INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
+VALUES ('2', '5');
+
+INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
+VALUES ('2', '6');
+
+INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
+VALUES ('1', '7');
+
+INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
+VALUES ('1', '8');
+
+INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
+VALUES ('1', '9');
+
+INSERT INTO "instructor_lesson" ("instructor_id", "lesson_id")
+VALUES ('1', '10');

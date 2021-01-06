@@ -1,5 +1,6 @@
 package se.kth.iv1351.jdbcintro.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Student {
@@ -8,10 +9,7 @@ public class Student {
     private String email;
 
     public Student() {
-    }
-
-    public Student(int studentId) {
-        this.studentId = studentId;
+        rentalInstruments = new ArrayList<>();
     }
 
     public Student(int studentId, String email) {
@@ -37,6 +35,18 @@ public class Student {
 
     public void setRentalInstruments(List<Instrument> rentalInstruments) {
         this.rentalInstruments = rentalInstruments;
+    }
+
+    public void addRentalInstruments(List<Instrument> rentalInstruments) throws Exception {
+        rentalInstruments.addAll(rentalInstruments);
+    }
+
+    public void validateRentalInstrument(int instrumentId) throws Exception {
+        if (rentalInstruments.size() >= 2)
+            throw new Exception("Cannot rent more than 2 instruments at a time.");
+        for (Instrument instrument : rentalInstruments)
+            if (instrument.getInstrumentId() == instrumentId)
+                throw new Exception("Cannot rent already rented instruments");
     }
 
 }
